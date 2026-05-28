@@ -27,6 +27,7 @@ AMCO_Character_Player::AMCO_Character_Player()
 	bUseControllerRotationRoll = false;
 	
 	GetCharacterMovement()->bOrientRotationToMovement = true;
+	GetCharacterMovement()->RotationRate = FRotator(0.f, 600.f, 0.f);
 	
 }
 
