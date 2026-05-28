@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "InputActionValue.h"
 #include "MCO_Character.h"
 #include "MCO_Character_Player.generated.h"
 
@@ -25,10 +26,12 @@ public:
 protected:
 	virtual void BeginPlay() override;
 	
-private:
+private://Function
 	void SetupInputMappingContext() const;
+	void Input_Trigger_Jump();
+	void Input_Trigger_Look(const FInputActionValue& InputActionValue);
 	
-private:
+private: // Property
 	UPROPERTY(VisibleDefaultsOnly)
 	TObjectPtr<USpringArmComponent> SpringArmComponent;
 	
@@ -41,5 +44,6 @@ private:
 	UPROPERTY(EditDefaultsOnly, Category = "MCO Settings|Input")
 	TObjectPtr<UInputAction> InputAction_Jump;
 	
-	
+	UPROPERTY(EditDefaultsOnly, Category = "MCO Settings|Input")
+	TObjectPtr<UInputAction> InputAction_Look;
 };
