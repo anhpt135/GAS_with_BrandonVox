@@ -30,6 +30,7 @@ private://Function
 	void SetupInputMappingContext() const;
 	void Input_Trigger_Jump();
 	void Input_Trigger_Look(const FInputActionValue& InputActionValue);
+	void Input_Trigger_Move(const FInputActionValue& InputActionValue);
 	
 private: // Property
 	UPROPERTY(VisibleDefaultsOnly)
@@ -46,4 +47,7 @@ private: // Property
 	
 	UPROPERTY(EditDefaultsOnly, Category = "MCO Settings|Input")
 	TObjectPtr<UInputAction> InputAction_Look;
+	
+	UPROPERTY(EditDefaultsOnly, Category = "MCO Settings|Input")
+	TObjectPtr<UInputAction> InputAction_Move;
 };

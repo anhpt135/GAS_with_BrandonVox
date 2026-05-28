@@ -5,6 +5,7 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "Camera/CameraComponent.h"
+#include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 
 
@@ -17,8 +18,16 @@ AMCO_Character_Player::AMCO_Character_Player()
 	SpringArmComponent->SetupAttachment(RootComponent);
 	CameraComponent->SetupAttachment(SpringArmComponent, USpringArmComponent::SocketName);
 	
+	
 	SpringArmComponent->bUsePawnControlRotation = true;
 	CameraComponent->bUsePawnControlRotation = false;
+	
+	bUseControllerRotationPitch = false;
+	bUseControllerRotationYaw = false;
+	bUseControllerRotationRoll = false;
+	
+	GetCharacterMovement()->bOrientRotationToMovement = true;
+	
 }
 
 void AMCO_Character_Player::BeginPlay()
@@ -44,6 +53,12 @@ void AMCO_Character_Player::SetupPlayerInputComponent(UInputComponent* PlayerInp
 			ETriggerEvent::Triggered, 
 			this, 
 			&AMCO_Character_Player::Input_Trigger_Look);
+		
+		EnhancedInputComponent->BindAction(
+			InputAction_Move,
+			ETriggerEvent::Triggered, 
+			this, 
+			&AMCO_Character_Player::Input_Trigger_Move);
 	}
 
 }
@@ -81,4 +96,17 @@ void AMCO_Character_Player::Input_Trigger_Look(const FInputActionValue& InputAct
 	const FVector2D LookAxisValue = InputActionValue.Get<FVector2D>();
 	AddControllerYawInput(LookAxisValue.X);
 	AddControllerPitchInput(LookAxisValue.Y);
+}
+
+void AMCO_Character_Player::Input_Trigger_Move(const FInputActionValue& InputActionValue)
+{
+	const FVector2D MoveAxisValue = InputActionValue.Get<FVector2D>();
+	
+	const FRotator YawRotation(0.f, GetControlRotation().Yaw, 0.f);
+	
+	const FVector ForwardDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
+	AddMovementInput(ForwardDirection, MoveAxisValue.Y);
+	
+	const FVector RightDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
+	AddMovementInput(RightDirection, MoveAxisValue.X);
 }
